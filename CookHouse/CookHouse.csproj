@@ -216,6 +216,7 @@
     <Content Include="Content\images\about-img.png" />
     <Content Include="Content\images\banner.jpg" />
     <Content Include="Content\images\base64.gif" />
+    <Content Include="Content\images\cart-empty.gif" />
     <Content Include="Content\images\chevron-down-solid.png" />
     <Content Include="Content\images\chicken.png" />
     <Content Include="Content\images\fb.png" />
