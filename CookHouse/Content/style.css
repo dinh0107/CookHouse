@@ -789,6 +789,8 @@ header {
 
 .list-logo {
   margin-top: 50px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 .list-logo .slick-slide {
   margin: 0 20px;
