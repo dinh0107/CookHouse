@@ -1,0 +1,307 @@
+﻿@model CookHouse.ViewModel.HeaderViewModel
+@using CookHouse.Models
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+}
+<div class="header-top">
+    <div class="container">
+        <div class="row">
+            <div class="col-6 d-flex">
+                <div class="header-contact">
+                    <i class="fa-solid fa-phone-volume"></i>
+                    Hotline:
+                    <a href="tel:@config.Title">@config.Hotline</a>
+                </div>
+                <div class="header-contact">
+                    <i class="fas fa-envelope"></i>
+                    Email:
+                    <a href="mailto:@config.Email">@config.Email</a>
+                </div>
+            </div>
+            <div class="col-6 d-flex justify-content-end">
+                <div class="social">
+                    <a href="@config.Facebook" class="facebook" target="_blank" rel="nofollow">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="@config.Instagram" class="instagram" target="_blank" rel="nofollow">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="@config.Twitter" class="twitter" target="_blank" rel="nofollow">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="@config.Youtube" class="youtube" target="_blank" rel="nofollow">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 d-flex align-items-center">
+                <a href="/">
+                    @if (config.Image != null)
+                    {
+                        <img src="~/Content/images/base64.gif" data-src="@Path.Combine("/images/configs/", config.Image)" alt="Logo" class="lazyload logo" />
+                    }
+                </a>
+                <div class="text-logo">
+                    Thêm hương vị
+                    <br />
+                    cho cuộc sống
+                </div>
+            </div>
+            <div class="col-lg-9 pr-xl-0">
+                <ul class="ul-reset nav">
+                    <li><a href="/">Trang chủ</a></li>
+                    @if (Model.Introduct.Any(a => a.ParentId == null))
+                    {
+
+                        foreach (var item in Model.Introduct.Where(a => a.ParentId == null))
+                        {
+                            <li>
+                                <a href="@Url.Action("ArticleCategory", new {url = item.Url})">@item.CategoryName</a>
+                                @if (Model.Introduct.Any(a => a.ParentId == item.Id))
+                                {
+                                    <i class="fas fa-caret-down fa-xs"></i>
+                                    <ul class="ul-reset sub-nav">
+                                        @foreach (var child in Model.Introduct.Where(a => a.ParentId == item.Id))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("ArticleCategory", new {url = child.Url})">
+                                                    @child.CategoryName
+                                                </a>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                }
+                            </li>
+                        }
+                    }
+                    <li>
+                        <a href="@Url.Action("AllProducts")">Sản phẩm</a>
+                        @if (Model.ProductCategories.Any(a => a.ParentId == null))
+                        {
+                            <i class="fas fa-caret-down fa-xs"></i>
+                            <ul class="ul-reset sub-nav">
+                                @foreach (var item in Model.ProductCategories.Where(a => a.ParentId == null))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("ProductCategory", new {url = item.Url})">
+                                            @item.CategoryName
+                                        </a>
+                                        @if (Model.ProductCategories.Any(a => a.ParentId == item.Id))
+                                        {
+                                            <ul class="ul-reset third-child">
+                                                @foreach (var child in Model.ProductCategories.Where(a => a.ParentId == item.Id))
+                                                {
+                                                    <li>
+                                                        <a href="@Url.Action("ProductCategory", new {url = child.Id})">
+                                                            @child.CategoryName
+                                                        </a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
+                                    </li>
+                                }
+
+                            </ul>
+                        }
+                    </li>
+                    @if (Model.ArticleCategories.Any(a => a.ParentId == null))
+                    {
+
+                        foreach (var item in Model.ArticleCategories.Where(a => a.ParentId == null))
+                        {
+                            <li>
+                                <a href="@Url.Action("ArticleCategory", new {url = item.Url})">@item.CategoryName</a>
+                                @if (Model.Introduct.Any(a => a.ParentId == item.Id))
+                                {
+                                    <i class="fas fa-caret-down fa-xs"></i>
+                                    <ul class="ul-reset sub-nav">
+                                        @foreach (var child in Model.ArticleCategories.Where(a => a.ParentId == item.Id))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("ArticleCategory", new {url = child.Url})">
+                                                    @child.CategoryName
+                                                </a>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                }
+                            </li>
+                        }
+                    }
+                    <li>
+                        <a href="@Url.Action("Contact")">
+                            Liên hệ
+                        </a>
+                    </li>   
+                    <li class="search"><i class="fa-solid fa-magnifying-glass"></i></li>
+                    <li>
+                        @Html.Action("CartSummary", "ShoppingCart")
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="search-box">
+    <div class="remove-box close">
+        <i class="far fa-times"></i>
+    </div>
+    <form action="@Url.Action("SearchProduct")" class="search-form">
+        <input type="search" name="keywords" class="form-control" placeholder="Tìm kiếm sản phẩm" required autocomplete="off" />
+        <button type="submit" class="btn btn-success"><i class="far fa-search"></i></button>
+    </form>
+</div>
+<section class="header-mb">
+    <div class="container">
+        <div class="row">
+            <div class="col-3 d-flex align-items-center">
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+            <div class="col-6 d-flex justify-content-center">
+                <a href="@Url.Action("Index")" class="logo">
+                    @if (config.Image != null)
+                    {
+                        <img src="@Path.Combine("/images/configs/", config.Image)" alt="Logo" />
+                    }
+                </a>
+            </div>
+            <div class="col-3 d-flex justify-content-end align-items-center">
+                @Html.Action("CartSummary", "ShoppingCart")
+            </div>
+        </div>
+    </div>
+    <div class="menu-mb">
+        <div class="box-nav">
+            <form action="@Url.Action("SearchProduct")" class="header-search-mb">
+                <input type="text" name="keywords" required="" class="form-control" placeholder="Nhập tìm kiếm bằng từ khóa..." />
+                <button type="submit">
+                    <i class="far fa-search"></i>
+                </button>
+            </form>
+            <ul class="ul-reset nav-mb">
+                <li>
+                    <a href="@Url.Action("Index")">
+                        Trang chủ
+                    </a>
+                </li>
+                @if (Model.Introduct.Any(a => a.ParentId == null))
+                {
+                    foreach (var item in Model.Introduct.Where(a => a.ParentId == null))
+                    {
+                        <li>
+                            <a href="@Url.Action("ArticleCategory", "Home", new { url = item.Url })">
+                                @item.CategoryName
+                            </a>
+                            @if (Model.Introduct.Any(a => a.ParentId == item.Id))
+                            {
+                                <div class="expand-bar"></div>
+                                <ul class="ul-reset sub-nav-mb">
+                                    @foreach (var child in Model.Introduct.Where(a => a.ParentId == item.Id))
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("ArticleCategory", "Home", new { url = child.Url })">
+                                                @child.CategoryName
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </li>
+                    }
+                }
+                <li>
+                    <a href="@Url.Action("AllProducts")">
+                        Sản phẩm
+                    </a>
+                    @if (Model.ProductCategories.Any(a => a.ParentId == null))
+                    {
+                        <div class="expand-bar"></div>
+                        <ul class="ul-reset sub-nav-mb">
+                            @foreach (var item in Model.ProductCategories.Where(a => a.ParentId == null))
+                            {
+                                <li>
+                                    <a href="@Url.Action("ProductCategory", "Home", new { url = item.Url })">
+                                        @item.CategoryName
+                                    </a>
+                                    @if (Model.ProductCategories.Any(a => a.ParentId == item.Id))
+                                    {
+                                        <ul class="ul-reset third-child-mb">
+                                            @foreach (var child in Model.ProductCategories.Where(a => a.ParentId == item.Id))
+                                            {
+                                                <li>
+                                                    <a href="@Url.Action("ProductCategory", "Home", new { url = child.Url })">
+                                                        @child.CategoryName
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    }
+                </li>
+                @if (Model.ArticleCategories.Any(a => a.ParentId == null))
+                {
+                    foreach (var item in Model.ArticleCategories.Where(a => a.ParentId == null))
+                    {
+                        <li>
+                            <a href="@Url.Action("ArticleCategory", "Home", new { url = item.Url })">
+                                @item.CategoryName
+                            </a>
+                            @if (Model.ArticleCategories.Any(a => a.ParentId == item.Id))
+                            {
+                                <div class="expand-bar"></div>
+                                <ul class="ul-reset sub-nav-mb">
+                                    @foreach (var child in Model.ArticleCategories.Where(a => a.ParentId == item.Id))
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("ArticleCategory", "Home", new { url = child.Url })">
+                                                @child.CategoryName
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </li>
+                    }
+                }
+                <li>
+                    <a href="@Url.Action("Contact")">
+                        liên hệ
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="socials-mb">
+            <p>Theo dõi chúng tôi</p>
+            <div class="d-flex justify-content-around">
+                <a href="@config.Facebook" rel="nofollow" target="_blank">
+                    <img src="~/Content/images/fb.png" alt="Facebook" />
+                </a>
+                <a href="@config.Youtube" rel="nofollow" target="_blank">
+                    <img src="~/Content/images/youtube.png" alt="Youtube" />
+                </a>
+                <a href="@config.Twitter" rel="nofollow" target="_blank">
+                    <img src="~/Content/images/twitter.png" alt="Twitter" />
+                </a>
+                <a href="@config.Instagram" rel="nofollow" target="_blank">
+                    <img src="~/Content/images/instagram.png" alt="Instagram" />
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,243 @@
+﻿@model CookHouse.ViewModel.ProductDetailViewModel
+@using CookHouse.Models
+@using Helpers
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+    ViewBag.Title = Model.Product.TitleMeta ?? Model.Product.Name;
+    ViewBag.Description = Model.Product.DescriptionMeta ?? Model.Product.Description;
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("ProductDetail", new { url = Model.Product.Url });
+
+    if (Model.Product.ListImage != null)
+    {
+        ViewBag.ImageShare = Request.Url?.GetLeftPart(UriPartial.Authority) + Path.Combine("/images/products/", Model.Product.ListImage.Split(',')[0]);
+    }
+}
+<section class="container">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("Index")">
+                <i class="fas fa-home"></i>
+                Trang chủ
+            </a>
+            <i class="far fa-angle-right ml-1"></i>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="@Url.Action("ProductCategory", "Home", new { url = Model.Product.ProductCategory.Url })">
+                @Model.Product.ProductCategory.CategoryName
+            </a>
+            <i class="far fa-angle-right ml-1"></i>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            @Model.Product.Name
+        </li>
+    </ol>
+    <div class="product-detail">
+        <div class="row">
+            <div class="col-lg-4">
+                @if (Model.Product.ListImage != null)
+                {
+                    var arrImg = Model.Product.ListImage.Split(',');
+                    <div class="slider-for">
+                        @foreach (var img in arrImg)
+                        {
+                            <a href="@Path.Combine("/images/products/", img)" data-fancybox="detail" class="slider-for-item">
+                                <img src="@Path.Combine("/images/products/", img)" alt="@Model.Product.Name" />
+                            </a>
+                        }
+                    </div>
+                    <div class="slider-nav">
+                        @foreach (var img in arrImg)
+                        {
+                            <div class="slider-nav-item">
+                                <img src="@Path.Combine("/images/products/", img)" alt="@Model.Product.Name" />
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="col-lg-5">
+                <div class="product-info">
+                    <h1 class="product-name-detail">
+                        @Model.Product.Name
+                    </h1>
+                </div>
+                @if (Model.Product.Description != null)
+                {
+                    <div class="description">
+                        @Html.Raw(HtmlHelpers.ReplaceLine(Model.Product.Description))
+                    </div>
+                }
+                <div class="info-hotline">
+                    Hãy gọi ngay tới số Hotline miễn phí <a href="tel:@config.Hotline">@config.Hotline</a> để mua hàng nhanh nhất
+                </div>
+                <div class="box-price">
+                    <div class="d-flex align-items-center">
+                        <span>Giá:</span>
+                        @if (Model.Product.PriceSale > 0)
+                        {
+                            <div class="price">
+                                @Html.DisplayFor(m => Model.Product.PriceSale)
+                            </div>
+                            <div class="price-sale">
+                                @Html.DisplayFor(m => Model.Product.Price)
+                            </div>
+                        }
+                        else if (Model.Product.Price > 0)
+                        {
+                            <div class="price">
+                                @Html.DisplayFor(m => Model.Product.Price)
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="price">
+                                Liên hệ
+                            </div>
+                        }
+                    </div>
+                    <div class="box-label">
+                        @if (Model.Product.PriceSale > 0)
+                        {
+                            var percent = (decimal)Model.Product.PriceSale / (decimal)Model.Product.Price;
+                            var discount = 100 - Math.Truncate(percent * 100);
+                            <div class="discount">
+                                Giảm @discount%
+                            </div>
+                        }
+                        @if (Model.Product.StockOff == true)
+                        {
+                            <div class="stock-off">Hết hàng</div>
+                        }
+                    </div>
+                </div>
+                <form id="formBookProduct">
+                    <input type="hidden" name="ProductId" value="@Model.Product.Id" />
+                    <div class="quantity">
+                        <div class="product-count">
+                            <input type="text" value="1" min="1" id="number" name="quantity" class="nice-number input-number" maxlength="4" />
+                        </div>
+                    </div>
+                    <button type="submit" class="add-cart" @if (Model.Product.StockOff == true) { @Html.Raw("disabled") }>
+                        Thêm vào giỏ hàng
+                    </button>
+                    <button class="btn-buy add-cart" @if (Model.Product.StockOff == true) { @Html.Raw("disabled") }>
+                        Mua ngay
+                    </button>
+                </form>
+            </div>
+            <div class="col-lg-3">
+                @if (Model.Banners.Any())
+                {
+                    <div class="side-note">
+                        @foreach (var item in Model.Banners)
+                        {
+                            <div class="note-item">
+                                @if (item.Image != null)
+                                {
+                                    <img src="~/Content/images/base64.gif" data-src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName" class="lazyload" />
+                                }
+                                <div>
+                                    <h5>@item.BannerName</h5>
+                                    <span>@item.Slogan</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-lg-9">
+            <div class="box-info mt-4 border">
+                <div class="relate-title text-dark">
+                    Thông tin sản phẩm
+                </div>
+                <div class="tab-content" id="productTabContent">
+                    <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="body-well">
+                            <div class="content-detail">
+                                @if (Model.Product.Body != null)
+                                {
+                                    @Html.Raw(Model.Product.Body)
+                                }
+                                else
+                                {
+                                    <div class="alert alert-success small">Nội dung đang cập nhật. Quý khách vui lòng quay lại sau.</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (Model.Products.Any())
+        {
+            <div class="col-lg-3 mt-4">
+                <div class="relate-title">
+                    Sản phẩm gợi ý
+                </div>
+                @foreach (var item in Model.Products)
+                {
+                    <div class="product-related">
+                        <a href="@Url.Action("ProductDetail", new { url = item.Url })" class="image">
+                            @if (item.ListImage != null)
+                            {
+                                <img data-src="@Path.Combine("/images/products/", item.ListImage.Split(',')[0])" src="~/Content/images/base64.gif" alt="@item.Name" class="lazyload" />
+                            }
+                        </a>
+                        <div class="body">
+                            <div class="subject">
+                                <a href="@Url.Action("ProductDetail", new { url = item.Url })">
+                                    @item.Name
+                                </a>
+                            </div>
+                            <div class="box-price">
+                                <div>
+                                    @if (item.PriceSale > 0)
+                                    {
+                                        <div class="price">
+                                            @Html.DisplayFor(m => item.PriceSale)
+                                        </div>
+                                        <div class="price-sale">
+                                            @Html.DisplayFor(m => item.Price)
+                                        </div>
+                                    }
+                                    else if (item.Price > 0)
+                                    {
+                                        <div class="price">
+                                            @Html.DisplayFor(m => item.Price)
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="price">
+                                            Liên hệ
+                                        </div>
+                                    }
+                                </div>
+                                @if (item.PriceSale > 0)
+                                {
+                                    var percent = (decimal)item.PriceSale / (decimal)item.Price;
+                                    var discount = 100 - Math.Truncate(percent * 100);
+                                    <div class="discount">
+                                        -@discount%
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
+<link href="~/Content/sweetalert2.css" rel="stylesheet" />
+@section scripts {
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="~/Scripts/jquery.nice-number.js"></script>
+    <script src="~/Scripts/sweetalert2.js"></script>
+    <script>
+        productDetail();
+    </script>
+}

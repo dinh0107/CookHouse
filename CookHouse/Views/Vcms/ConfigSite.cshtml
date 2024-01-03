@@ -1,0 +1,158 @@
+﻿@model CookHouse.Models.ConfigSite
+@{
+    ViewBag.Title = "Cấu hình Website";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    .form_name {
+        width: 135px;
+    }
+</style>
+<a class="btn quick-link" href="@Url.Action("Index","Vcms")"><i class="far fa-list mr-1"></i> Quay lại trang chủ</a>
+<div class="box_content">
+    @if (ViewBag.Result == "success")
+    {
+        <div id="AlertBox" class="alert alert-success"><strong>Cập nhật thông tin thành công</strong></div>}
+    @using (Html.BeginForm("ConfigSite", "Vcms", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(a => a.Id)
+        <table class="form_table">
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Title)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Title)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Description)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Description)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Image)</td>
+                <td class="form_text">@Html.TextBoxFor(model => model.Image, new { type = "file" }) <span class="red-warring">Kích thươc: 180px - 50px</span></td>
+            </tr>
+            @if (Model.Image != null)
+            {
+                <tr>
+                    <td class="form_name"></td>
+                    <td class="form_text"><img class="img-border" src="@Path.Combine("/images/configs/", Model.Image)?w=150" /></td>
+                </tr>
+            }
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Favicon)</td>
+                <td class="form_text">@Html.TextBoxFor(model => model.Favicon, new { type = "file" }) <span class="red-warring">Kích thươc: 64px - 64px</span></td>
+            </tr>
+            @if (Model.Favicon != null)
+            {
+                <tr>
+                    <td class="form_name"></td>
+                    <td class="form_text"><img class="img-border" src="@Path.Combine("/images/configs/", Model.Favicon)?w=150" /></td>
+                </tr>
+            }
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.ImageShare)</td>
+                <td class="form_text">@Html.TextBoxFor(model => model.ImageShare, new { type = "file" })</td>
+            </tr>
+            @if (Model.ImageShare != null)
+            {
+                <tr>
+                    <td class="form_name"></td>
+                    <td class="form_text"><img class="img-border" src="@Path.Combine("/images/configs/", Model.ImageShare)?w=150" /></td>
+                </tr>
+            }
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.AboutImage)</td>
+                <td class="form_text">@Html.TextBoxFor(model => model.AboutImage, new { type = "file" }) <span class="red-warring">Kích thươc: 470px - 600px</span></td>
+            </tr>
+            @if (Model.AboutImage != null)
+            {
+                <tr>
+                    <td class="form_name"></td>
+                    <td class="form_text"><img class="img-border" src="@Path.Combine("/images/configs/", Model.AboutImage)?w=150" /></td>
+                </tr>
+            }
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.AboutImage2)</td>
+                <td class="form_text">@Html.TextBoxFor(model => model.AboutImage2, new { type = "file" }) <span class="red-warring">Kích thươc: 470px - 600px</span></td>
+            </tr>
+            @if (Model.AboutImage2 != null)
+            {
+                <tr>
+                    <td class="form_name"></td>
+                    <td class="form_text"><img class="img-border" src="@Path.Combine("/images/configs/", Model.AboutImage2)?w=150" /></td>
+                </tr>
+            }
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.AboutText)</td>
+                <td class="form_text">@Html.EditorFor(model => model.AboutText)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.AboutUrl)</td>
+                <td class="form_text">@Html.EditorFor(model => model.AboutUrl)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.InfoContact)</td>
+                <td class="form_text">@Html.EditorFor(model => model.InfoContact)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.InfoFooter)</td>
+                <td class="form_text">@Html.EditorFor(model => model.InfoFooter)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.BankInfo)</td>
+                <td class="form_text">@Html.EditorFor(model => model.BankInfo)</td>
+            </tr>
+            @*<tr>
+                    <td class="form_name">@Html.LabelFor(model => model.Place)</td>
+                    <td class="form_text">@Html.EditorFor(model => model.Place)</td>
+                </tr>*@
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Hotline)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Hotline)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Zalo)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Zalo)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Email)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Email)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Facebook)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Facebook)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Youtube)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Youtube)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Twitter)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Twitter)</td>
+            </tr>
+            <tr>
+                    <td class="form_name">@Html.LabelFor(model => model.Instagram)</td>
+                    <td class="form_text">@Html.EditorFor(model => model.Instagram)</td>
+                </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Youtube)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Youtube)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.GoogleMap)</td>
+                <td class="form_text">@Html.EditorFor(model => model.GoogleMap)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.GoogleAnalytics)</td>
+                <td class="form_text">@Html.EditorFor(model => model.GoogleAnalytics)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.LiveChat)</td>
+                <td class="form_text">@Html.EditorFor(model => model.LiveChat)</td>
+            </tr>
+            <tr>
+                <td class="form_name"></td>
+                <td class="form_text"><input type="submit" class="btn quick-link" value="Cập nhật" /></td>
+            </tr>
+        </table>
+    }
+</div>

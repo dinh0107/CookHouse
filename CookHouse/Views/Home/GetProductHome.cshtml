@@ -1,0 +1,19 @@
+﻿@model IEnumerable<CookHouse.Models.Product>
+@if (Model.Any())
+{
+    var delay = 200;
+    foreach (var item in Model.Take(8))
+    {
+        <div class="col-lg-3 col-md-6 col-6" data-aos-duration="700" data-aos-delay="@delay" data-aos="fade-up">
+            @Html.Partial("_ItemProduct", item)
+        </div>
+        delay += 200;
+    }
+}
+else
+{
+    <div class="col-12">
+        <p class="alert alert-success small">Nội dung hiện chưa được cập nhật. Vui lòng quay lại sau !!!!</p>
+    </div>
+
+}

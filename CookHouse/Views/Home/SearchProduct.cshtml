@@ -1,0 +1,51 @@
+﻿@model CookHouse.ViewModel.SearchViewModel
+@using PagedList.Mvc
+@{
+    ViewBag.Title = "Tìm kiếm";
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("SearchProduct");
+    ViewBag.Robots = "noindex";
+}
+<div class="container">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="/">
+                <i class="fas fa-home"></i>
+                Trang chủ
+            </a>
+            <i class="far fa-angle-right ml-1"></i>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            Từ khóa: @Model.Keywords
+        </li>
+    </ol>
+    <div class="row mb-4">
+        <div class="col-lg-3 order-lg-0 order-1">
+            @Html.Action("MenuLeftProduct")
+        </div>
+        <div class="col-lg-9 order-lg-1 order-0">
+            <div class="row box-article">
+                @if (Model.Products.Any())
+                {
+                    foreach (var item in Model.Products)
+                    {
+                        <div class="col-lg-4 col-md-4 col-6">
+                            @Html.Partial("_ItemProduct", item)
+                        </div>
+                    }
+                    if (Model.Products.PageCount > 1)
+                    {
+                        <div class="col-12 text-center">
+                            @Html.PagedListPager(Model.Products, page => Url.Action("SearchProduct", new { page, Keywords = Model.Keywords }))
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-12">
+                        <div class=" alert alert-info small mt-3">Không tìm thấy kết quả!!</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

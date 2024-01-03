@@ -1,0 +1,59 @@
+﻿@model CookHouse.ViewModel.CategoryProductViewModel
+@using PagedList.Mvc
+@{
+    ViewBag.Title = "Sản phẩm";
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("AllProducts");
+    ViewBag.Robots = "noindex";
+
+    if (Model.EndCount > Model.Products.TotalItemCount)
+    {
+        Model.EndCount = Model.Products.TotalItemCount;
+    }
+}
+<div class="container">
+    <ol class="breadcrumb mt-2 pl-0">
+        <li class="breadcrumb-item">
+            <a href="/">
+                <i class="fas fa-home"></i>
+                Trang chủ
+            </a>
+            <i class="far fa-angle-right ml-1"></i>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            Tất cả sản phẩm
+        </li>
+    </ol>
+    <div class="row mb-4">
+        <div class="col-lg-3 order-lg-0 order-1">
+            @Html.Action("MenuLeftProduct")
+        </div>
+        <div class="col-lg-9 order-lg-1 order-0">
+            <input type="hidden" name="currentUrl" value="@Url.Action("AllProducts", "Home")" />
+            <div class="filter">
+                @if (Model.Products.Any())
+                {
+                    <div class="product-result">Hiển thị <strong>@Model.BeginCount - @Model.EndCount</strong> trên tổng số <strong>@Model.Products.TotalItemCount</strong> sản phẩm</div>
+                }
+                <div class="sort">
+                    <label for="sort">Sắp xếp:</label>
+                    <select id="sort">
+                        <option value="">Mặc định</option>
+                        <option value="date-desc" @if (Model.Sort == "date-desc") { @Html.Raw("selected='selected'") }>Mới nhất</option>
+                        <option value="date-asc" @if (Model.Sort == "date-asc") { @Html.Raw("selected='selected'") }>Cũ nhất</option>
+                        <option value="price-asc" @if (Model.Sort == "price-asc") { @Html.Raw("selected='selected'") }>Giá tăng dần</option>
+                        <option value="price-desc" @if (Model.Sort == "price-desc") { @Html.Raw("selected='selected'") }>Giá giảm dần</option>
+                    </select>
+                </div>
+            </div>
+            <div id="list-item-sort">
+                @Html.Action("GetProduct")
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Scripts/sweetalert2.js"></script>
+    <script>
+        Sort("/Home/GetProduct");
+    </script>
+}

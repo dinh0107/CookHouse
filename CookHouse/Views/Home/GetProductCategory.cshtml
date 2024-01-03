@@ -1,0 +1,25 @@
+﻿@model CookHouse.ViewModel.CategoryProductViewModel
+@using PagedList.Mvc
+<div class="row box-article">
+    @if (Model.Products.Any())
+    {
+        foreach (var item in Model.Products)
+        {
+            <div class="col-lg-4 col-md-4 col-6">
+                @Html.Partial("_ItemProduct", item)
+            </div>
+        }
+        if (Model.Products.PageCount > 1)
+        {
+            <div class="col-12 text-center">
+                @Html.PagedListPager(Model.Products, page => Url.Action("ProductCategory", new { page, sort = Model.Sort }))
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12">
+            <p class="alert alert-success small">Nội dung hiện chưa được cập nhật. Vui lòng quay lại sau !!!!</p>
+        </div>
+    }
+</div>

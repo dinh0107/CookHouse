@@ -1,0 +1,42 @@
+﻿@model CookHouse.ViewModel.ArticleViewModel
+@using PagedList.Mvc
+@{
+    ViewBag.Title = "Tất cả bài viết";
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("AllArticles");
+    ViewBag.Robots = "noindex";
+}
+<div class="container">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="/">
+                <i class="fas fa-home"></i>
+                Trang chủ
+            </a>
+            <i class="far fa-angle-right ml-1"></i>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            Tất cả bài viết
+        </li>
+    </ol>
+    <div class="row mb-4">
+        <div class="col-lg-3 order-lg-0 order-1">
+            @Html.Action("MenuLeftArticle")
+        </div>
+        <div class="col-lg-9 order-lg-1 order-0">
+            <div class="row box-article">
+                @foreach (var item in Model.Articles)
+                {
+                    <div class="col-lg-4 col-md-4 col-6">
+                       @Html.Partial("_ItemArticle", item)
+                    </div>
+                }
+                @if (Model.Articles.PageCount > 1)
+                {
+                    <div class="col-12 text-center">
+                        @Html.PagedListPager(Model.Articles, page => Url.Action("AllArticles", new { page }))
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

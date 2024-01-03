@@ -1,0 +1,43 @@
+﻿@model IEnumerable<CookHouse.Models.ArticleCategory>
+<div class="category">
+    <div class="category-title">
+        danh mục bài viết
+    </div>
+    <div class="accordion">
+        @foreach (var item in Model.Where(a => a.ParentId == null))
+        {
+            <div class="card">
+                <div class="card-header" id="heading-@item.Id">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="mb-0">
+                            <a href="@Url.Action("ArticleCategory", "Home", new { url = item.Url })">@item.CategoryName (@item.Articles.Count())</a>
+                        </h2>
+                        @if (Model.Any(a => a.ParentId == item.Id))
+                        {
+                            <button class="btn-card" type="button" data-toggle="collapse" data-target="#collapse-@item.Id" aria-expanded="false" aria-controls="collapse-@item.Id">
+                                <i class="far fa-chevron-down"></i>
+                            </button>
+                        }
+                    </div>
+                </div>
+                @if (Model.Where(a => a.ParentId == item.Id).Any())
+                {
+                    <div id="collapse-@item.Id" class="collapse">
+                        <div class="card-body">
+                            <ul class="pl-0 mb-0">
+                                @foreach (var child in Model.Where(p => p.ParentId == item.Id))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("ArticleCategory", "Home", new {url = child.Url})">
+                                            @child.CategoryName (@child.Articles.Count())
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

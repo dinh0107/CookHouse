@@ -1,0 +1,30 @@
+﻿@model CookHouse.ViewModel.MenuArticleViewModel
+<div class="box-border p-3 shadow">
+    <div class="recent-post">
+        <div class="post-sidebar-title">
+            Bài viết gần đây
+        </div>
+        @foreach (var item in Model.Articles)
+        {
+            <div class="media py-3">
+                <div class="recent-post-img">
+                    <a href="@Url.Action("ArticleDetail", "Home", new { url = item.Url })" class="mr-3">
+                        @if (item.Image != null)
+                        {
+                            <img src="~/Content/images/base64.gif" data-src="@Path.Combine("/images/articles/", item.Image)" class="lazyload" alt="@item.Subject">
+                        }
+                    </a>
+                </div>
+                <div class="media-body">
+                    <a href="@Url.Action("ArticleDetail", "Home", new { url = item.Url })" class="subject">
+                        @item.Subject
+                    </a>
+                    <span class="date">
+                        <i class="fal fa-calendar-alt"></i>
+                        @item.CreateDate.ToString("dd/MM/yyyy")
+                    </span>
+                </div>
+            </div>
+        }
+    </div>
+</div>

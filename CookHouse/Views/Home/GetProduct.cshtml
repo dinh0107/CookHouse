@@ -1,0 +1,16 @@
+﻿@model CookHouse.ViewModel.CategoryProductViewModel
+@using PagedList.Mvc
+<div class="row box-article">
+    @foreach (var item in Model.Products)
+    {
+        <div class="col-lg-4 col-md-4 col-6">
+            @Html.Partial("_ItemProduct", item)
+        </div>
+    }
+    @if (Model.Products.PageCount > 1)
+    {
+        <div class="col-12 text-center">
+            @Html.PagedListPager(Model.Products, page => Url.Action("AllProducts", new { page, sort = Model.Sort }))
+        </div>
+    }
+</div>

@@ -1,0 +1,14 @@
+﻿@model CookHouse.ViewModel.CartSummaryViewModel
+<a href="@Url.Action("Index", "ShoppingCart")" class="box-icon" title="Giỏ hàng của bạn">
+    <i class="fa-solid fa-cart-shopping"></i>
+    <span class="itemshop">
+        @if (Model.Count < 100)
+            {
+                @Model.Count
+            }
+            else
+            {
+                @: 99+
+            }
+    </span>
+</a>

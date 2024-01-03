@@ -1,0 +1,49 @@
+﻿@model CookHouse.Models.Product
+<div class="card product mb-3">
+    <div class="card-thuml">
+        @if (Model.ListImage != null)
+        {
+            <img src="~/Content/images/base64.gif" data-src="@Path.Combine("/images/products/", Model.ListImage.Split(',')[0])" alt="@Model.Name" class="lazyload" />
+        }
+        <div class="product-action">
+            <a href="@Url.Action("ProductDetail", new {url = Model.Url})" class="view"><i class="fa-solid fa-eye"></i></a>
+            <a href="javascript:;" onclick="addToCart(@Model.Id)"class="qick-cart"><i class="fa-sharp fa-solid fa-cart-circle-plus"></i></a>
+        </div>
+        @if (Model.PriceSale > 0)
+        {
+            var percent = (decimal)Model.PriceSale / (decimal)Model.Price;
+            var discount = 100 - Math.Truncate(percent * 100);
+            if (discount > 0)
+            {
+                <div class="discont">
+                    Giảm @discount%
+                </div>
+            }
+        }
+
+    </div>
+    <div class="card-body product-bd">
+        <a href="@Url.Action("ProductDetail", new {url = Model.Url})" class="product-name">@Model.Name</a>
+        @if (Model.PriceSale > 0)
+        {
+            <div class="price">
+                @Html.DisplayFor(a => Model.PriceSale)
+            </div>
+            <del class="price-sale">
+                @Html.DisplayFor(a => Model.Price)
+            </del>
+        }
+        else if (Model.Price > 0)
+        {
+            <div class="price">
+                @Html.DisplayFor(a => Model.PriceSale)
+            </div>
+        }
+        else
+        {
+            <div class="price">
+                Liên hệ
+            </div>
+        }
+    </div>
+</div>

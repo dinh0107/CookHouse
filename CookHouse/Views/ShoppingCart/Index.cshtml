@@ -1,0 +1,171 @@
+﻿@model CookHouse.ViewModel.ShoppingCartViewModel
+@{
+    ViewBag.Title = "Giỏ hàng của bạn";
+    var count = 0;
+}
+<section class="shopping-cart">
+    <div class="container">
+        @if (Model.CartItems.Any())
+        {
+            using (Html.BeginForm("CheckOut", "ShoppingCart"))
+            {
+                @Html.ValidationSummary(true)
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="my-cart ">
+                            <div class="scroll-hidden">
+                                @foreach (var item in Model.CartItems)
+                                {
+                                    count++;
+                                    var p = item.CartItems.Price ?? 0;
+                                    var price = item.CartItems.Count * p;
+                                    <input type="hidden" name="CartTotal" value="@Model.CartTotal" />
+                                    <div class="cart-item cart-id" data-cart="@item.CartItems.RecordId">
+                                        <div class="cart-item-details">
+                                            @if (item.CartItems.Product.ListImage != null)
+                                            {
+                                                <img src="~/Content/images/base64.gif" data-src="@Path.Combine("/images/products/", item.CartItems.Product.ListImage.Split(',')[0])" alt="@item.CartItems.Product.Name" class="cart-item-img lazyload">
+                                            }
+                                            <a href="@Url.Action("ProductDetail","Home", new {url = item.CartItems.Product.Url})" class="cart-item-name">@item.CartItems.Product.Name</a>
+                                        </div>
+                                        <div class="cart-item-price text-center">
+                                            @if (p == 0)
+                                            {
+                                                @:Liên hệ
+                                            }
+                                            else
+                                            {
+                                                @p.ToString("N0")@:đ
+                                            }
+                                        </div>
+                                        <div class="cart-item-quantity cart-quantity">
+                                            <input type="hidden" name="RecordId" value="@item.CartItems.RecordId" />
+                                            <input type="text" id-value="@item.CartItems.RecordId" value="@item.CartItems.Count" min="1" id="orderQuantity_@count" name="Quantity" class="nice-number input-number" maxlength="4" />
+                                        </div>
+                                        <div class="cart-item-total" data-cart-item="@item.CartItems.RecordId">@price.ToString("N0")đ</div>
+                                        <a href="javascript:;" title="Xóa" class="remove-product" style="color: dimgray" data-id="@item.CartItems.RecordId">
+                                            <i class="fal fa-trash-alt"></i>
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                            <div class="box-checkout box-address mb-4">
+                                <div class="title mb-3 text-dark">
+                                    Thông tin giao hàng
+                                </div>
+                                <div class="form-row form-group">
+                                    <div class="col-lg-6 col-md-6">
+                                        <input type="text" name="Order.CustomerInfo.Fullname" class="form-control mb-lg-0 mm-md-0 mb-3" placeholder="Họ và tên"  />
+                                        @Html.ValidationMessageFor(a => a.Order.CustomerInfo.Fullname)
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        <input type="text" name="Order.CustomerInfo.Mobile" class="form-control" placeholder="Số điện thoại" required />
+                                        @Html.ValidationMessageFor(a => a.Order.CustomerInfo.Mobile)
+                                    </div>
+                                </div>
+                                <div class="form-group form-row">
+                                    <div class="col-lg-6 col-md-6">
+                                        @Html.DropDownListFor(a => a.CityId, Model.CitySelectList, "Chọn thành phố", new { @class = "form-control mb-lg-0 mm-md-0 mb-3", data_item = "city" })
+                                        @Html.ValidationMessageFor(a => a.CityId)
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        @Html.DropDownListFor(a => a.DistrictId, Model.DistrictSelectList, "Chọn quận huyện", new { @class = "form-control", data_item = "district" })
+                                        @Html.ValidationMessageFor(a => a.DistrictId)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.TextBoxFor(a => a.Order.CustomerInfo.Address, new { @class = "form-control", @placeholder = "Địa chỉ" })
+                                    @Html.ValidationMessageFor(a => a.Order.CustomerInfo.Address)
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="Order.CustomerInfo.Email" class="form-control" placeholder="Email của bạn" required />
+                                    @Html.ValidationMessageFor(a => a.Order.CustomerInfo.Email)
+                                </div>
+                                <div class="form-group">
+                                    <textarea class="form-control" name="Order.CustomerInfo.Body" rows="4" placeholder="Lời nhắn (nếu có)"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="title-order">Đơn hàng</div>
+                        <div class="box-order border">
+                            <div class="box-inner">
+                                <div class="order-info">
+                                    <div class="name">Số lượng</div>
+                                    <span class="info">@Model.Count</span>
+                                </div>
+                                <div class="order-info">
+                                    <div class="name">Phí vận chuyển</div>
+                                    <span class="info ship-fee">0đ</span>
+                                </div>
+                                <input type="hidden" id="cartTotal" name="CartTotal" value="@Model.CartTotal.ToString("N0")" />
+                                <div class="order-info">
+                                    <div class="name">Tổng số tiền (Bạn cần thanh toán)</div>
+                                    <span class="info total-price">@Model.CartTotal.ToString("N0") đ</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-name">Hình thức chuyển hàng</div>
+                        <div class="box-inner box-order border">
+                            <label class="alert alert-info d-block">
+                                <input checked="checked" data-val="true" name="Order.Transport"  type="radio" value="1">
+                                Thường
+                            </label>
+                            <label class="alert alert-info d-block">
+                                <input id="Order_Transport" name="Order.Transport"  type="radio" value="2">
+                                Nhanh
+                            </label>
+                            <label class="alert alert-info d-block">
+                                <input id="Order_Transport" name="Order.Transport" type="radio" value="3">
+                                Hỏa tốc
+                            </label>
+                        </div>
+                        <div class="box-name">Hình thức thanh toán</div>
+                        <div class="box-inner box-order border">
+                            <label class="alert alert-info d-block">
+                                <input checked="checked" data-val="true" data-val-number="The field Thanh toán must be a number." data-val-required="The Thanh toán field is required." id="Order_TypePay" name="Order.TypePay" type="radio" value="1">
+                                <i class="fal fa-fw fa-credit-card"></i>
+                                CHUYỂN KHOẢN
+                            </label>
+                            <label class="alert alert-info d-block">
+                                <input id="Order_TypePay" name="Order.TypePay" type="radio" value="2">
+                                <i class="fas fa-fw fa-money-bill-alt"></i>
+                                TIỀN MẶT
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-block btn-order">Đặt hàng</button>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="empty-cart">
+                <img src="~/Content/images/cart-empty.gif" alt="giỏ hàng" class="cart-empty" />
+                Giỏ hàng đang trống!!!
+                <a href="@Url.Action("AllProduct", "Home")">Mua hàng ngay</a>
+            </div>
+        }
+    </div>
+</section>
+<link href="~/Content/sweetalert2.css" rel="stylesheet" />
+@section scripts{
+    <script src="~/Scripts/jquery.nice-number.js"></script>
+    <script src="~/Scripts/sweetalert2.js"></script>
+    <script>
+        $(".nice-number").niceNumber({
+            autoSize: false,
+            onDecrement: function (input, number, object) {
+                UpdateToCard($(input).attr('id-value'), -1);
+                return false;
+            },
+            onIncrement: function (input, number, object) {
+                UpdateToCard($(input).attr('id-value'), 1); return false;
+            }
+        });
+        CartJS()
+    </script>
+}

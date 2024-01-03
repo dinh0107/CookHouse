@@ -1,0 +1,289 @@
+﻿@model CookHouse.ViewModel.HomeViewModel
+@using CookHouse.Models
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+    ViewBag.Title = config.Title;
+    ViewBag.Description = config.Description;
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("Index", "Home");
+    var fb = Model.Banners.FirstOrDefault(a => a.GroupId == 1);
+    if (fb != null)
+    {
+        ViewBag.ImageShare = Request.Url?.GetLeftPart(UriPartial.Authority) + Path.Combine("/images/banners/", fb.Image);
+    }
+}
+@if (Model.Banners.Any(a => a.GroupId == 1))
+{
+    <div class="banner">
+        @foreach (var item in Model.Banners.Where(a => a.GroupId == 1))
+        {
+            <a href="@item.Url">
+                @if (item.Image != null)
+                {
+                    <img src="~/Content/images/base64.gif" data-src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName" class="lazyload" />
+                }
+            </a>
+        }
+    </div>
+    <div class="banner-mb">
+        @foreach (var item in Model.Banners.Where(a => a.GroupId == 1))
+        {
+            <a href="@item.Url">
+                @if (item.ImageMobile != null)
+                {
+                    <img src="~/Content/images/base64.gif" data-src="@Path.Combine("/images/banners/", item.ImageMobile)" alt="@item.BannerName" class="lazyload" />
+                }
+            </a>
+        }
+    </div>
+}
+<div class="about-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5">
+                @if (config.AboutImage != null)
+                {
+                    <img src="~/Content/images/base64.gif" data-src="@Path.Combine("/images/configs/", config.AboutImage)" alt="@config.Title" class="lazyload about-img" />
+                }
+            </div>
+            <div class="col-lg-7">
+                <div class="sub-title mb-1">
+                    Giới thiệu
+                </div>
+                <h2 class="title custom-color mb-4">
+                    Công ty TNHH Thực phẩm
+                    <br />
+                    COOKHOUSE Việt Nam
+                </h2>
+                <div class="content-detail text-white py-2">
+                    @Html.Raw(config.AboutText)
+                </div>
+                <a href="@config.AboutUrl" class="btn btn-global mt-3">Xem thêm<i class="fa-solid fa-circle-chevron-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <img class="lacay1" src="~/Content/images/lacay.png" />
+    <img class="lacay2" src="~/Content/images/lacay.png" />
+</div>
+@if (Model.Banners.Any(a => a.GroupId == 2))
+{
+    var delay = 200;
+    <div class="intro-section">
+        <div class="container">
+            <div class="row">
+                @foreach (var item in Model.Banners.Where(a => a.GroupId == 2))
+                {
+                    var arrName = item.Slogan.Split(new[] { " ", "\n" }, StringSplitOptions.None);
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card card-intr" data-aos-duration="700" data-aos-delay="@delay" data-aos="fade-up">
+                            @if (item.Image != null)
+                            {
+                                <img src="~/Content/images/base64.gif" data-src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName" class="lazyload img-intro" />
+                            }
+                            <div class="card-body p-0 text-center">
+                                <div class="d-flex box-count">
+                                    <div class="count">
+                                        @arrName[0]
+                                    </div>
+                                    @if (arrName.Length > 1)
+                                    {
+                                        <div class="artb">
+                                            @arrName[1]
+                                        </div>
+                                    }
+
+                                </div>
+                                <div class="text-card">
+                                    @item.BannerName
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    delay += 200;
+                }
+            </div>
+        </div>
+    </div>
+}
+<div class="container">
+    <div class=" padding-section">
+        <h2 class="title text-center">
+            Sản phẩm của chúng tôi
+        </h2>
+        <div class="filter-home">
+            <div class="filter-item active" data-id="">
+                Tất cả
+            </div>
+            @foreach (var item in Model.ProductCategories.Take(6))
+            {
+                <div class="filter-item" data-id="@item.Id">
+                    @item.CategoryName
+                </div>
+            }
+        </div>
+        <div class="row" id="filter-home">
+            @Html.Action("GetProductHome")
+        </div>
+        <div class="text-center">
+            <a href="@Url.Action("AllProducts")" class="btn btn-global mt-3">Xem thêm<i class="fa-solid fa-circle-chevron-right"></i></a>
+        </div>
+    </div>
+</div>
+
+
+<div class="intro-section custom-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5">
+                <img src="~/Content/images/about-2.jpg" alt="" class="lazyload about-img" />
+            </div>
+            @if (Model.Banners.Any(a => a.GroupId == 3))
+            {
+                var delay = 200;
+                <div class="col-lg-7">
+                    <h2 class="title custom-line mb-5">
+                        Tại sao chọn Cookhouse?
+                    </h2>
+                    @foreach (var item in Model.Banners.Where(a => a.GroupId == 3))
+                    {
+                        <div class="media intro-media" data-aos-duration="700" data-aos-delay="@delay" data-aos="fade-up">
+                            @if (item.Image != null)
+                            {
+                                <img src="~/Content/images/base64.gif" data-src="@Path.Combine("/images/banners/", item.Image)" alt="@item.Image" class="lazyload media-img" />
+                            }
+                            <div class="media-body">
+                                <div class="media-title">
+                                    @item.BannerName
+                                </div>
+                                <div class="media-sub">
+                                    @item.Slogan
+                                </div>
+                            </div>
+                        </div>
+                        delay += 200;
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@if (Model.Feedbacks.Any())
+{
+    <div class="container padding-section">
+        <h2 class="title text-center">
+            khách hàng nói về chúng tôi
+        </h2>
+        <div class="container">
+            <div class="list-feedback mt-5">
+                @foreach (var item in Model.Feedbacks)
+                {
+                    <div class="feedback-item mt-2">
+                        <div class="feedback-text shadow rounded mt-4">
+                            @item.Content
+                        </div>
+                        <div class="info-feedback mt-4">
+                            <div class="media align-items-center">
+                                @if (item.Image != null)
+                                {
+                                    <img class="mr-2 lazyload" src="~/Content/images/base64.gif" data-src="@Path.Combine("/images/feedbacks/", item.Image)" alt="@item.Name">
+                                }
+                                else
+                                {
+                                    <img class="mr-2 lazyload" src="~/Content/images/on-image.jpg" alt="@item.Name">
+                                }
+                                <div class="media-body">
+                                    <div class="d-lg-flex align-items-center justify-content-between">
+                                        <h5 class="mt-0 mb-0">@item.Name</h5>
+                                        <div class="star ml-lg-2 text-warning">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <p class="mb-0">@item.Classify</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dot">
+                            <i class="fas fa-quote-right"></i>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+}
+@if (Model.Articles.Any())
+{
+    var count = 1;
+    var delay = 200;
+    <div class="intro-section article-sc">
+        <h2 class="title text-center">
+            Tin tức và hoạt động
+        </h2>
+        <div class="container">
+            <div class="parent">
+                @foreach (var item in Model.Articles.Take(6))
+                {
+                    <div class="parent-item-@count card card-articl-h" data-aos-duration="700" data-aos-delay="@delay" data-aos="fade-up">
+                        <a href="@Url.Action("ArticleDetail", new {url = item.Url})" class="d-block overflow-hidden box-img">
+                            @if (item.Image != null)
+                            {
+                                <img src="~/Content/images/base64.gif" data-src="@Path.Combine("/images/articles/", item.Image)" alt="@item.Subject" class="lazyload" />
+                            }
+                        </a>
+                        <div class="card-body p-0">
+                            <div class="date">
+                                <i class="fal fa-calendar-alt"></i>
+                                @item.CreateDate.ToString("dd/MM/yyyy")
+                            </div>
+                            <a href="@Url.Action("ArticleDetail", new {url = item.Url})" class="subject">@item.Subject</a>
+                            <div class="sub-ar">
+                                @item.Description
+                            </div>
+                        </div>
+                    </div>
+                    count += 1;
+                    delay += 200;
+                }
+            </div>
+            <div class="text-center">
+                <a href="@Url.Action("AllArticles")" class="btn btn-global mt-3">Xem thêm<i class="fa-solid fa-circle-chevron-right"></i></a>
+            </div>
+        </div>
+
+    </div>
+}
+@if (Model.Banners.Any(a => a.GroupId == 4))
+{
+    <div class="container padding-section">
+        <h2 class="title text-center">
+            đối tác - khách hàng
+        </h2>
+        <div class="list-logo">
+            @foreach (var item in Model.Banners.Where(a => a.GroupId == 4))
+            {
+                <a href="@item.Url">
+                    @if (item.Image != null)
+                    {
+                        <img src="~/Content/images/base64.gif" data-src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName" class="lazyload" />
+                    }
+                </a>
+            }
+        </div>
+    </div>
+}
+
+@section scripts{
+    <script src="~/Scripts/jquery.countup.min.js"></script>
+    <script src="~/Scripts/waypoints.min.js"></script>
+    <script>
+        HomeJs();
+        $('.count').countUp({
+            'time': 2000,
+            'delay': 10
+        });
+    </script>
+}

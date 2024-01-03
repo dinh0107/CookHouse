@@ -1,0 +1,128 @@
+﻿@model CookHouse.ViewModel.FooterViewModel
+@using CookHouse.Models
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+}
+<div class="sub">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-5">
+                <div class="media d-lg-flex d-md-flex d-none align-items-center h-100">
+                    <i class="fa-sharp fa-solid fa-phone-volume fa-shake phone-icon"></i>
+                    <div class="media-body ml-2">
+                        Liên hệ
+                        <a href="tel:@config.Hotline" class="footer-phone">@config.Hotline</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-7">
+                <div class="row">
+                    <div class="col-lg-6 text-right d-lg-block d-md-none sub-text">
+                        Vui lòng nhập chính xác địa chỉ Email để nhận được thông tin mới nhất từ CookHouse
+                    </div>
+                    <div class="col-lg-6">
+                        <form class="subform" id="formSubscribe">
+                            @Html.AntiForgeryToken()
+                            <input type="email" name="email" placeholder="Nhập email để nhận thông tin" required />
+                            <button type="submit">Đăng ký</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="content-detail text-white">
+                    @Html.Raw(config.InfoFooter)
+                </div>
+                <div class="footer-social mt-3">
+                    <div class="icon">
+                        <a href="@config.Facebook" target="_blank" rel="nofollow">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                    </div>
+                    <div class="icon">
+                        <a href="@config.Twitter" target="_blank">
+                            <i class="fa-brands fa-twitter"></i>
+                        </a>
+                    </div>
+                    <div class="icon">
+                        <a href="@config.Instagram" target="_blank" rel="nofollow">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                    </div>
+                    <div class="icon">
+                        <a href="@config.Youtube" target="_blank" rel="nofollow">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="ft-title">
+                    Thông tin
+                </div>
+                <ul class="ul-reset ul-ft mt-3">
+                    <li>
+                        <a href="/">Trang chủ</a>
+                    </li>
+                    @foreach (var item in Model.ArticleCategories)
+                    {
+                        <li>
+                            <a href="@Url.Action("ArticleCategory", new {url = item.Url})">@item.CategoryName</a>
+                        </li>
+                    }
+                    <li>
+                        <a href="@Url.Action("Contact")">Liên hệ</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-2">
+                <div class="ft-title">
+                    Sản phẩm
+                </div>
+                <ul class="ul-reset ul-ft mt-3">
+                    @foreach (var item in Model.ProductCategories)
+                    {
+                        <li>
+                            <a href="@Url.Action("ProductCategory", new {url = item.Url})">@item.CategoryName</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="col-lg-3">
+                <div class="ft-title">
+                    Bản đồ
+                </div>
+                @if (config.GoogleMap != null)
+                {
+                    <div class="embed-responsive embed-responsive-16by9 mt-4">
+                        @Html.Raw(config.GoogleMap)
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</footer>
+<div class="copyright">
+    Copyright &copy; 2023 All right reserved. Design by Vicogroup.vn
+</div>
+<div class="box-link">
+    <div class="backtop">
+        <i class="fa-sharp fa-regular fa-arrow-up fa-bounce"></i>
+    </div>
+    @if (config.Zalo != null)
+    {
+        <a href="@config.Zalo" target="_blank" rel="nofollow" class="zalo">
+            <img src="~/Content/images/zalo-logo.png" alt="Zalo" />
+        </a>
+    }
+    @if (config.Hotline != null)
+    {
+        <a href="tel:@config.Hotline" class="tel"><img src="~/Content/images/tel.png" alt="Tel" /></a>
+    }
+</div>

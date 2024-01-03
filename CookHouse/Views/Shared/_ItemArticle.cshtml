@@ -1,0 +1,24 @@
+﻿@model CookHouse.Models.Article
+<div class="article-item">
+    <a href="@Url.Action("ArticleDetail", new {url = Model.Url})" class="article-img">
+        @if (Model.Image != null)
+        {
+            <img src="~/Content/images/base64.gif" data-src="@Path.Combine("/images/articles/", Model.Image)" alt="@Model.Subject" class="lazyload" />
+        }
+    </a>
+    <div class="date">
+        <i class="far fa-calendar ml-1"></i>
+        @Model.CreateDate.ToString("dd/MM/yyyy")
+    </div>
+    <a class="subject" href="@Url.Action("ArticleDetail", new {url = Model.Url})">@Model.Subject</a>
+    <div class="desc">
+        @if (Model.Description != null)
+        {
+            @Model.Description
+        }
+        else
+        {
+            @:Đang cập nhật
+        }
+    </div>
+</div>
