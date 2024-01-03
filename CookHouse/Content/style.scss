@@ -1165,12 +1165,8 @@ footer {
 }
 
 .info-feedback {
-    h5 {
+    .name {
         color: #333;
-        text-align: justify;
-        font-size: 16px;
-        font-style: normal;
-        line-height: 24px;
         text-transform: uppercase;
         @include Roboto-Bold;
     }

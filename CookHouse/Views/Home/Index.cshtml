@@ -61,8 +61,8 @@
             </div>
         </div>
     </div>
-    <img class="lacay1" src="~/Content/images/lacay.png" />
-    <img class="lacay2" src="~/Content/images/lacay.png" />
+    <img class="lacay1" src="~/Content/images/lacay.png" alt="Lá cây"/>
+    <img class="lacay2" src="~/Content/images/lacay.png" alt="Lá cây"/>
 </div>
 @if (Model.Banners.Any(a => a.GroupId == 2))
 {
@@ -188,11 +188,11 @@
                                 }
                                 else
                                 {
-                                    <img class="mr-2 lazyload" src="~/Content/images/on-image.jpg" alt="@item.Name">
+                                    <img class="mr-2 lazyload" src="~/Content/images/base64.gif" alt="@item.Name">
                                 }
                                 <div class="media-body">
                                     <div class="d-lg-flex align-items-center justify-content-between">
-                                        <h5 class="mt-0 mb-0">@item.Name</h5>
+                                        <div class="name">@item.Name</div>
                                         <div class="star ml-lg-2 text-warning">
                                             <i class="fas fa-star"></i>
                                             <i class="fas fa-star"></i>
