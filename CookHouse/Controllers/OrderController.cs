@@ -97,9 +97,9 @@ namespace CookHouse.Controllers
             return PartialView(model);
         }
 
-        public ActionResult ReportProduct(int? page, int? cityId, string fromDate, string toDate, int? status = 2)
+        public ActionResult ReportProduct(int? page, int? cityId, string fromDate, string toDate, int? status = 3)
         {
-            var orderDetails = _unitOfWork.OrderDetailRepository.GetQuery();
+            var orderDetails = _unitOfWork.OrderDetailRepository.GetQuery(a => a.Order.Status == status, q => q.OrderByDescending(a => a.Id));
 
             if (status.HasValue)
             {

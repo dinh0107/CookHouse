@@ -87,6 +87,13 @@
                             <div>@Html.ActionLink("Danh sách bài viết", "ListArticle", "Article", null, new { @class = "text_link" })</div>
                         </div>
                     </li>
+                    <li data-id="7">
+                        <a class="root"><span>Quản lý Phản hồi</span><i class="fas fa-caret-down"></i></a>
+                        <div class="sub hidden">
+                            <div>@Html.ActionLink("Thêm mới phản hồi", "Feedback", "Contact", null, new { @class = "text_link" })</div>
+                            <div>@Html.ActionLink("Danh sách phản hồi", "ListFeedback", "Contact", null, new { @class = "text_link" })</div>
+                        </div>
+                    </li>
                     <li data-id="8">
                         <a class="root"><span>Quản lý Quảng cáo</span><i class="fas fa-caret-down"></i></a>
                         <div class="sub hidden">
