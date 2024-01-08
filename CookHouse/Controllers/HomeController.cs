@@ -101,6 +101,11 @@ namespace CookHouse.Controllers
                 return RedirectToAction("Index");
             }
             var articles = _unitOfWork.ArticleRepository.GetQuery(a => a.Active && (a.ArticleCategoryId == cateogory.Id || a.ArticleCategory.ParentId == cateogory.Id), o => o.OrderByDescending(a => a.CreateDate));
+            if (articles.Count() == 1)
+            {
+                var fi = articles.First();
+                return RedirectToAction("ArticleDetail", new { url = fi.Url });
+            }
             var model = new ArticleViewModel
             {
                 ArticleCategory = cateogory,
