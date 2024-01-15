@@ -147,7 +147,10 @@ namespace CookHouse.Controllers
                         typepay = "Chuyển khoản";
                         break;
                     case 2:
-                        typepay = "Tiền mặt";
+                        typepay = "Chuyển khoản VNPAY";
+                        break;
+                    case 3:
+                        typepay = "Thanh toán khi giao hàng (COD)";
                         break;
                 }
                 var sb = "<p style='font-size:16px'>Thông tin đơn hàng gửi từ website " + Request.Url?.Host + "</p>";

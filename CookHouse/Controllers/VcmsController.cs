@@ -251,6 +251,10 @@ namespace CookHouse.Controllers
                     {
                         config.ImageShare = imgFile;
                     }
+                    else if (Request.Files.Keys[i] == "QRImage")
+                    {
+                        config.QRImage = imgFile;
+                    }
                 }
 
                 config.Facebook = model.Facebook;

@@ -266,6 +266,13 @@ function CartJS() {
 
         }
     });
+    $('input[name="Order.TypePay"]').change(function () {
+        $('.qr-code').slideUp();
+        if ($(this).val() === '2') {
+            $('.qr-code').slideDown();
+        }
+    });
+    $('input[name="Order.TypePay"]:checked').change();
 }
 window.addEventListener("scroll", function () {
     if ($(this).scrollTop() > 40) {

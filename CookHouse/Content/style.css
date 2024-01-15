@@ -2079,6 +2079,15 @@ footer {
         content:"";
     }
 }*/
+.qr-code {
+  display: none;
+}
+.qr-code img {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}
+
 .box-icon {
   display: block;
   width: 40px;

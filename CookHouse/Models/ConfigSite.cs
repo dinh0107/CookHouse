@@ -38,6 +38,9 @@ namespace CookHouse.Models
         public string Title { get; set; }
         [Display(Name = "Ảnh giới thiệu"), UIHint("ImageAbout")]
         public string AboutImage { get; set; }
+        [Display(Name = "Ảnh QR CODE")]
+        public string QRImage { get; set; }
+
         [Display(Name = "Ảnh giới thiệu"), UIHint("ImageConfig")]
         public string AboutImage2 { get; set; }
         [Display(Name = "Ảnh chia sẻ"), UIHint("ImageAbout")]

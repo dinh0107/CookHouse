@@ -1,5 +1,7 @@
 ﻿@model CookHouse.ViewModel.ShoppingCartViewModel
+@using CookHouse.Models
 @{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
     ViewBag.Title = "Giỏ hàng của bạn";
     var count = 0;
 }
@@ -56,7 +58,7 @@
                                 </div>
                                 <div class="form-row form-group">
                                     <div class="col-lg-6 col-md-6">
-                                        <input type="text" name="Order.CustomerInfo.Fullname" class="form-control mb-lg-0 mm-md-0 mb-3" placeholder="Họ và tên"  />
+                                        <input type="text" name="Order.CustomerInfo.Fullname" class="form-control mb-lg-0 mm-md-0 mb-3" placeholder="Họ và tên" />
                                         @Html.ValidationMessageFor(a => a.Order.CustomerInfo.Fullname)
                                     </div>
                                     <div class="col-lg-6 col-md-6">
@@ -111,11 +113,11 @@
                         <div class="box-name">Hình thức chuyển hàng</div>
                         <div class="box-inner box-order border">
                             <label class="alert alert-info d-block">
-                                <input checked="checked" data-val="true" name="Order.Transport"  type="radio" value="1">
+                                <input checked="checked" data-val="true" name="Order.Transport" type="radio" value="1">
                                 Thường
                             </label>
                             <label class="alert alert-info d-block">
-                                <input id="Order_Transport" name="Order.Transport"  type="radio" value="2">
+                                <input id="Order_Transport" name="Order.Transport" type="radio" value="2">
                                 Nhanh
                             </label>
                             <label class="alert alert-info d-block">
@@ -126,14 +128,25 @@
                         <div class="box-name">Hình thức thanh toán</div>
                         <div class="box-inner box-order border">
                             <label class="alert alert-info d-block">
-                                <input checked="checked" data-val="true" data-val-number="The field Thanh toán must be a number." data-val-required="The Thanh toán field is required." id="Order_TypePay" name="Order.TypePay" type="radio" value="1">
+                                <input checked="checked" name="Order.TypePay" type="radio" value="1" id="typePay">
                                 <i class="fal fa-fw fa-credit-card"></i>
                                 CHUYỂN KHOẢN
                             </label>
                             <label class="alert alert-info d-block">
-                                <input id="Order_TypePay" name="Order.TypePay" type="radio" value="2">
+                                <input name="Order.TypePay" type="radio" value="2" id="typePay">
+                                <i class="fal fa-fw fa-credit-card"></i>
+                                CHUYỂN KHOẢN VNPAY
+                            </label>
+                            @if (config.QRImage != null)
+                            {
+                                <div class="qr-code mb-1">
+                                    <img src="~/Content/images/base64.gif" data-src="@Path.Combine("/images/configs/", config.QRImage)" alt="QR CODE" class="lazyload" />
+                                </div>
+                            }
+                            <label class="alert alert-info d-block">
+                                <input id="typePay" name="Order.TypePay" type="radio" value="3">
                                 <i class="fas fa-fw fa-money-bill-alt"></i>
-                                TIỀN MẶT
+                                Thanh toán khi giao hàng (COD)
                             </label>
                         </div>
                         <button type="submit" class="btn btn-block btn-order">Đặt hàng</button>
