@@ -30,115 +30,93 @@
             break;
     }
 }
-<div class="container py-5">
-    <div class="row">
-        <div class="col-lg-6 border-right">
-            <div class="success-message">
-                <svg viewBox="0 0 76 76" class="success-message__icon icon-checkmark">
-                    <circle cx="38" cy="38" r="36" />
-                    <path fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M17.7,40.9l10.9,10.9l28.7-28.7" />
-                </svg>
-                <h1 class="success-message__title">Đặt hàng thành công</h1>
-                <div class="success-message__content">
-                    <p> Mã đơn hàng : <strong>@Model.MaDonHang</strong></p>
+
+<div class="d-flex align-items-center justify-content-center">
+    <div class="receipt-main">
+        <div class="receipt-header receipt-header-mid row">
+            <div class="col-xs-8 col-sm-8 col-md-8 text-left">
+                <div class="receipt-right">
+                    <h5>Thông tin </h5>
+                    <p><b>Họ và tên :</b> @Model.CustomerInfo.Fullname</p>
+                    <p><b>Mobile :</b> @Model.CustomerInfo.Mobile</p>
+                    <p><b>Email :</b> @Model.CustomerInfo.Email</p>
+                    <p><b>Địa chỉ :</b> @Model.CustomerInfo.Address</p>
+                    <p><b>Hình thức vận chuyển :</b> @transport</p>
+                    <p><b>Hình thức thanh toán :</b> @typepay</p>
                 </div>
             </div>
-            <div class="border p-3">
-                Thông tin giao hàng
-                <div class="order-info">@Model.CustomerInfo.Fullname</div>
-                <div class="order-info">@Model.CustomerInfo.Mobile</div>
-                <div class="order-info">@Model.CustomerInfo.Address</div>
-                <div class="order-info">Phương thức thanh toán: </div>
-                <strong>@typepay</strong>
-                <br />
-                <div div class="order-info">Hình thức vận chuyển: </div>
-                <strong>@transport</strong>
-                @if (Model.TypePay == 1)
-                {
-                    <div class="title-check">
-                        Thông tin chuyển khoản
-                    </div>
-                    <div class="content-detail mt-3">
-                        @Html.Raw(configsite.BankInfo)
-                    </div>
-                }
+            <div class="col-xs-4 col-sm-4 col-md-4 mt-lg-0 mt-3">
+                <div class="receipt-left">
+                    Mã hóa đơn: <br />
+                    <span> @Model.MaDonHang</span>
+                </div>
             </div>
         </div>
-        <div class="col-lg-6">
-            @foreach (var item in Model.OrderDetails)
+        <div class="scroll-hidden shadow-none rounded-0">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th class="text-center">Số lượng</th>
+                        <th class="text-center">Giá</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderDetails)
+                    {
+                        var price = item.Quantity * item.Price;
+                        <tr>
+                            <td>@item.Product.Name</td>
+                            <td class="text-center">@item.Quantity</td>
+                            <td class="text-center">
+                                @if (price == 0)
+                                {
+                                    @: Liên hệ
+                                }
+                                else
+                                {
+                                    @Convert.ToDecimal(price).ToString("N0") @:đ
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="total-bill text-right mb-2">
+            Phí vận chuyển: <strong>@Html.DisplayFor(a => a.ShipFee) đ</strong>
+        </div>
+        <div class="total-bill text-right">
+            Tổng tiền: <strong>@Model.TotalFee().ToString("N0")đ</strong>
+        </div>
+        @if (Model.TypePay == 1)
+        {
+            <div class="title-check">
+                Thông tin chuyển khoản
+            </div>
+            <div class="content-detail mt-3">
+                @Html.Raw(configsite.BankInfo)
+            </div>
+        }
+        @if (Model.TypePay == 2)
+        {
+            <div class="title-check">
+                VN PAY QR
+            </div>
+            if (configsite.QRImage != null)
             {
-                var price = item.Quantity * item.Price;
-                <div class="media item-card">
-                    <div class="media-thuml">
-                        @if (item.Product.ListImage != null)
-                        {
-                            <img class="align-self-center mr-3 lazyload" src="~/Content/images/base64.gif" data-src=@Path.Combine("/images/products/", item.Product.ListImage.Split(',')[0]) alt="@item.Product.Name">
-                        }
-                        <div class="cart-number">
-                            @item.Quantity
-                        </div>
-                    </div>
-                    <div class="media-body ml-3">
-                        <div class="info-cart">
-                            <h5 class="mt-0">@item.Product.Name</h5>
-                        </div>
-                        <div class="cart-money">
-                            @if (price == 0)
-                            {
-                                @: Liên hệ
-                            }
-                            else
-                            {
-                                @Convert.ToDecimal(price).ToString("N0") @:đ
-                            }
-                        </div>
-                    </div>
+                <div class="qr-code mb-1 text-center d-block">
+                    <img src="~/Content/images/base64.gif" data-src="@Path.Combine("/images/configs/", configsite.QRImage)" alt="QR CODE" class="lazyload" />
                 </div>
             }
-            <hr />
-            <div class="d-flex justify-content-between total pb-0">
-                <p>Phí vận chuyển:</p>
-                <span>@Model.ShipFee.ToString("N0")đ</span>
-            </div>
-            <div class="d-flex justify-content-between total">
-                <p>Tổng cộng:</p>
-                <span>@Model.TotalFee().ToString("N0")đ</span>
+        }
+        <div class="row receipt-header receipt-header-mid receipt-footer">
+            <div class="col-xs-8 col-sm-8 col-md-8 text-left">
+                <div class="receipt-right">
+                    <p><b>Ngày :</b>@Model.CreateDate.ToString("dd/MM/yyyy")</p>
+                    <div style="color: rgb(140, 140, 140);">Cảm ơn bạn đã mua sắm.!</div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<script>
-    function PathLoader(el) {
-        this.el = el;
-        this.strokeLength = el.getTotalLength();
-
-        // set dash offset to 0
-        this.el.style.strokeDasharray =
-            this.el.style.strokeDashoffset = this.strokeLength;
-    }
-
-    PathLoader.prototype._draw = function (val) {
-        this.el.style.strokeDashoffset = this.strokeLength * (1 - val);
-    }
-
-    PathLoader.prototype.setProgress = function (val, cb) {
-        this._draw(val);
-        if (cb && typeof cb === 'function') cb();
-    }
-
-    PathLoader.prototype.setProgressFn = function (fn) {
-        if (typeof fn === 'function') fn(this);
-    }
-
-    var body = document.body,
-        svg = document.querySelector('svg path');
-
-    if (svg !== null) {
-        svg = new PathLoader(svg);
-
-        setTimeout(function () {
-            document.body.classList.add('active');
-            svg.setProgress(1);
-        }, 200);
-    }
-</script>

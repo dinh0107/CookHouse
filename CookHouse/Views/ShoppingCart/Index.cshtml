@@ -130,16 +130,16 @@
                             <label class="alert alert-info d-block">
                                 <input checked="checked" name="Order.TypePay" type="radio" value="1" id="typePay">
                                 <i class="fal fa-fw fa-credit-card"></i>
-                                CHUYỂN KHOẢN
+                               Chuyển khoản
                             </label>
                             <label class="alert alert-info d-block">
                                 <input name="Order.TypePay" type="radio" value="2" id="typePay">
                                 <i class="fal fa-fw fa-credit-card"></i>
-                                CHUYỂN KHOẢN VNPAY
+                                Chuyển khoản VNPAY
                             </label>
                             @if (config.QRImage != null)
                             {
-                                <div class="qr-code mb-1">
+                                <div class="qr-code mb-1 text-center">
                                     <img src="~/Content/images/base64.gif" data-src="@Path.Combine("/images/configs/", config.QRImage)" alt="QR CODE" class="lazyload" />
                                 </div>
                             }

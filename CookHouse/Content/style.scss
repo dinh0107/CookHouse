@@ -1884,7 +1884,6 @@ footer {
     img {
         max-width: 100% !important;
         height: auto;
-        object-fit: contain;
     }
 
     iframe {
@@ -2422,6 +2421,124 @@ $success__secondary: #B8BABB;
 .banner-mb {
     display: none;
 }
+.text-danger strong {
+    color: #9f181c;
+}
+
+.receipt-main {
+    width: 60%;
+    background: #ffffff none repeat scroll 0 0;
+    border-bottom: 12px solid #333333;
+    border-top: 12px solid #9f181c;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    padding: 40px 30px !important;
+    position: relative;
+    box-shadow: 0 1px 21px #acacac;
+    color: #333333;
+
+    @include maxWidth(1024px) {
+        width: 80%;
+    }
+
+    @include maxWidth(768px) {
+        width: 90% !important;
+    }
+
+    @include maxWidth(1024px) {
+        width: 80%;
+    }
+}
+
+.receipt-main p {
+    color: #333333;
+    line-height: 1.42857;
+}
+
+.receipt-footer h1 {
+    font-size: 15px;
+    font-weight: 400 !important;
+    margin: 0 !important;
+}
+
+.receipt-main::after {
+    background: #414143 none repeat scroll 0 0;
+    content: "";
+    height: 5px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: -13px;
+}
+
+.receipt-main thead {
+    background: #414143 none repeat scroll 0 0;
+}
+
+.receipt-main thead th {
+    color: #fff;
+}
+
+.receipt-right h5 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 7px 0;
+}
+
+.receipt-right p {
+    font-size: 14px;
+    margin: 0px;
+}
+
+.receipt-right p i {
+    text-align: center;
+    width: 18px;
+}
+
+.receipt-main td {
+    padding: 9px 20px !important;
+}
+
+.receipt-main th {
+    padding: 13px 20px !important;
+}
+
+.receipt-main td {
+    font-size: 16px;
+    font-weight: initial !important;
+}
+
+.receipt-main td p:last-child {
+    margin: 0;
+    padding: 0;
+}
+
+.receipt-main td h2 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.receipt-header-mid .receipt-left h1 {
+    margin: 34px 0 0;
+    text-align: right;
+    text-transform: uppercase;
+}
+
+.receipt-left {
+    span {
+        @include Bold;
+        font-size: 25px;
+    }
+}
+
+.receipt-header-mid {
+    margin: 24px 0;
+    overflow: hidden;
+}
+
+#container {
+    background-color: #dcdcdc;
+}
 
 @include maxWidth(1024px) {
 }
@@ -2697,9 +2814,18 @@ $success__secondary: #B8BABB;
     .chevron-prev {
         left: 0;
     }
+
+    .receipt-left{
+        h2{
+
+        }
+    }
 }
 
 @include maxWidth(600px) {
+    .receipt-main {
+        padding: 20px 15px !important;
+    }
 
     .menu-mb {
         width: 100%;
@@ -2858,3 +2984,6 @@ $success__secondary: #B8BABB;
         }
     }
 }
+
+
+
