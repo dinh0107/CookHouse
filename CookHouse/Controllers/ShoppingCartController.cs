@@ -98,12 +98,6 @@ namespace CookHouse.Controllers
             {
                 var carts = ShoppingCart.GetCart(HttpContext);
                 var item = carts.GetCartItems();
-
-                if (carts.GetTotal() < 100000)
-                {
-                    return RedirectToAction("Index");
-                }
-
                 var city = _unitOfWork.CityRepository.GetById(model.CityId);
                 if (city.ShipFee != null)
                 {
