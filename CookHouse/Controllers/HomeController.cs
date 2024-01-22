@@ -7,20 +7,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
-using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Configuration;
 using System.Web.Mvc;
-using System.Web.Services.Description;
 
 namespace CookHouse.Controllers
 {
     public class HomeController : Controller
     {
         private readonly UnitOfWork _unitOfWork = new UnitOfWork();
-        private static string Email => WebConfigurationManager.AppSettings["email"];
-        private static string Password => WebConfigurationManager.AppSettings["password"];
         public ConfigSite ConfigSite => (ConfigSite)HttpContext.Application["ConfigSite"];
 
         private IEnumerable<ArticleCategory> ArticleCategories() =>
@@ -156,7 +151,7 @@ namespace CookHouse.Controllers
             {
                 return Json(new { status = false, msg = "Hãy điền đúng định dạng." });
             }
-            DateTime currentDate = DateTime.Now.Date;
+            var currentDate = DateTime.Now.Date;
             var count = _unitOfWork.ContactRepository.GetQuery(a => a.IP == IP && DbFunctions.TruncateTime(a.CreateDate) == currentDate).Count();
             if (count > 5)
             {
@@ -172,7 +167,7 @@ namespace CookHouse.Controllers
                         $"<p>Nội dung:{model.Body}</p>" +
                         $"<p>Đây là hệ thống gửi email tự động, vui lòng không phản hồi lại email này.</p>";
 
-            Task.Run(() => HtmlHelpers.SendEmail("gmail", subject, body, ConfigSite.Email, Email, Email, Password, ConfigSite.Title));
+            Task.Run(() => HtmlHelpers.SendEmail("gmail", subject, body, ConfigSite.Email, ConfigSite.EmailSend, ConfigSite.EmailSend, ConfigSite.EmailPass, ConfigSite.Title));
             return Json(new { status = true, msg = "Gửi liên hệ thành công.\nChúng tôi sẽ liên lạc lại với bạn sớm nhất có thể." });
         }
         [HttpPost, ValidateAntiForgeryToken]

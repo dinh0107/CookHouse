@@ -2,7 +2,6 @@
 using CookHouse.Models;
 using CookHouse.ViewModel;
 using Helpers;
-using PagedList;
 using System;
 using System.Drawing;
 using System.IO;
@@ -275,6 +274,8 @@ namespace CookHouse.Controllers
                 config.InfoContact = model.InfoContact;
                 config.AboutUrl = model.AboutUrl;
                 config.BankInfo = model.BankInfo;
+                config.EmailPass = model.EmailSend;
+                config.EmailPass = model.EmailPass;
 
                 if (model.Zalo != null)
                 {

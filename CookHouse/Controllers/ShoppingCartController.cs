@@ -4,7 +4,6 @@ using Helpers;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace CookHouse.Controllers
@@ -13,8 +12,6 @@ namespace CookHouse.Controllers
     public class ShoppingCartController : BaseController
     {
         public ConfigSite ConfigSite => (ConfigSite)HttpContext.Application["ConfigSite"];
-        private static string Email => WebConfigurationManager.AppSettings["email"];
-        private static string Password => WebConfigurationManager.AppSettings["password"];
 
         private string MemberEmail => RouteData.Values["Email"].ToString();
         [Route("thong-tin")]
@@ -191,9 +188,7 @@ namespace CookHouse.Controllers
                 sb += "</table>";
                 sb += "<p>Cảm ơn bạn đã tin tưởng và mua hàng của chúng tôi.</p>";
                 var orderId = model.Order.Id;
-                Task.Run(() => HtmlHelpers.SendEmail("gmail", "[" + model.Order.MaDonHang + "] Đơn đặt hàng từ website " + Request.Url?.Host, sb, model.Order.CustomerInfo.Email, Email, Email, Password, ConfigSite.Title, model.Order.CustomerInfo.Email, ConfigSite.Email));
-                Task.Run(() => HtmlHelpers.SendEmail("gmail", "[" + model.Order.MaDonHang + "] Có đơn đặt hàng từ website " + Request.Url?.Host, sb, ConfigSite.Email, Email, Email, Password, ConfigSite.Title, ConfigSite.Email, ConfigSite.Email));
-
+                Task.Run(() => HtmlHelpers.SendEmail("gmail", "[" + model.Order.MaDonHang + "] Đơn đặt hàng từ website " + Request.Url?.Host, sb, model.Order.CustomerInfo.Email, ConfigSite.EmailSend, ConfigSite.EmailSend, ConfigSite.EmailPass, ConfigSite.Title, ConfigSite.Email, ConfigSite.Email));
 
                 return RedirectToAction("CheckOutComplete", new { orderId });
             }
@@ -206,7 +201,6 @@ namespace CookHouse.Controllers
             }
             return RedirectToAction("Index");
         }
-
         [Route("thanh-toan-thanh-cong")]
         public ActionResult CheckOutComplete(int orderId = 0)
         {
@@ -219,14 +213,12 @@ namespace CookHouse.Controllers
 
             return View(order);
         }
-
         public ActionResult EmptyCart()
         {
             var cart = ShoppingCart.GetCart(HttpContext);
             cart.EmptyCart();
             return RedirectToAction("Index");
         }
-
         [Route("them-vao-gio-hang")]
         public JsonResult AddToCart(int productId, string returnUrl, int quantity = 1)
         {
@@ -262,7 +254,6 @@ namespace CookHouse.Controllers
                 return Json(data);
             }
         }
-
         [HttpPost]
         public void AddProduct(int sid = 0, int pid = 0, int quantity = 0)
         {
@@ -308,7 +299,7 @@ namespace CookHouse.Controllers
             return PartialView("CartSummary", model);
         }
         [HttpPost]
-        public JsonResult UpdateCartV2(int productId, int changeValue )
+        public JsonResult UpdateCartV2(int productId, int changeValue)
         {
             try
             {

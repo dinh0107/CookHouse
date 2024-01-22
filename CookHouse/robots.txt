@@ -1,0 +1,5 @@
+user-agent: *
+allow : /
+disallow: /tim-kiem*
+
+sitemap: https://cookhouse.vn/sitemap.xml

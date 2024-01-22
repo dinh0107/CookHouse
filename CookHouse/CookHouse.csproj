@@ -153,6 +153,10 @@
     <Compile Include="Migrations\202401150147482_qr-code.designer.cs">
       <DependentUpon>202401150147482_qr-code.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202401220415503_AddInfoToConfigSite.cs" />
+    <Compile Include="Migrations\202401220415503_AddInfoToConfigSite.designer.cs">
+      <DependentUpon>202401220415503_AddInfoToConfigSite.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\Article.cs" />
@@ -295,6 +299,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="robots.txt" />
     <Content Include="Scripts\aos.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -464,6 +469,7 @@
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Scripts\waypoints.min.js" />
+    <Content Include="sitemap.xml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -603,6 +609,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202401150147482_qr-code.resx">
       <DependentUpon>202401150147482_qr-code.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202401220415503_AddInfoToConfigSite.resx">
+      <DependentUpon>202401220415503_AddInfoToConfigSite.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

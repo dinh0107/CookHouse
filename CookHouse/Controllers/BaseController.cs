@@ -1,21 +1,19 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using CookHouse.DAL;
 using System.Linq;
 using System.Web.Mvc;
-using CookHouse.DAL;
 
-namespace CookHouse.Controllers 
+namespace CookHouse.Controllers
 {
-    public class BaseController : Controller 
+    public class BaseController : Controller
     {
         public readonly UnitOfWork _unitOfWork = new UnitOfWork();
 
         public SelectList CitySelectList => new SelectList(_unitOfWork.CityRepository.Get(a => a.Active, q => q.OrderBy(a => a.Sort)), "Id", "Name");
         public SelectList DistrictSelectList(int? cityId) => new SelectList(_unitOfWork.DistrictRepository.Get(a => a.Active && a.CityId == cityId, q => q.OrderBy(a => a.Sort)), "Id", "Name");
-        public SelectList WardSelectList(int? districtId) => new SelectList(_unitOfWork.WardRepository.Get(a => a.Active && a.DistrictId == districtId, q => q.OrderBy(a => a.Sort)), "Id", "Name"); 
-         
-        public JsonResult GetCities(string city ="")
-        { 
+        public SelectList WardSelectList(int? districtId) => new SelectList(_unitOfWork.WardRepository.Get(a => a.Active && a.DistrictId == districtId, q => q.OrderBy(a => a.Sort)), "Id", "Name");
+
+        public JsonResult GetCities(string city = "")
+        {
             var cities = _unitOfWork.CityRepository
                 .GetQuery(a => a.Active && a.Name.ToLower().Contains(city.ToLower()), q => q.OrderBy(a => a.Sort)).Select(a => new { a.Id, a.Name });
             return Json(cities, JsonRequestBehavior.AllowGet);

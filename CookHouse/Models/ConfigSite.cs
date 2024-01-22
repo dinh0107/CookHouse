@@ -63,5 +63,9 @@ namespace CookHouse.Models
         public string InfoFooter { get; set; }
         [Display(Name = "Tài khoản ngân hàng"), UIHint("EditorBox")]
         public string BankInfo { get; set; }
+        [Display(Name = "Email gửi thư đi"), StringLength(100), UIHint("TextBox")]
+        public string EmailSend { get; set; }
+        [Display(Name = "Mật khẩu Email gửi thư đi"), StringLength(100), UIHint("TextBox")]
+        public string EmailPass { get; set; }
     }
 }
