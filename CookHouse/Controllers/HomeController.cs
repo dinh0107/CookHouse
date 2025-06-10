@@ -10,9 +10,11 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using CookHouse.Filters;
 
 namespace CookHouse.Controllers
 {
+    [DdosProtect(Limit = 120)]
     public class HomeController : Controller
     {
         private readonly UnitOfWork _unitOfWork = new UnitOfWork();
@@ -23,7 +25,7 @@ namespace CookHouse.Controllers
         private IEnumerable<ProductCategory> ProductCategories() =>
             _unitOfWork.ProductCategoryRepository.Get(a => a.CategoryActive, q => q.OrderBy(a => a.CategorySort));
 
-        [ChildActionOnly]
+        [ChildActionOnly, SkipDdosCheck]
         public PartialViewResult Header()
         {
             var intro = ArticleCategories().Where(a => a.TypePost == TypePost.Introduct && a.ShowMenu);
@@ -37,7 +39,7 @@ namespace CookHouse.Controllers
             };
             return PartialView(model);
         }
-        [ChildActionOnly]
+        [ChildActionOnly, SkipDdosCheck]
         public PartialViewResult Footer()
         {
             var productCategory = ProductCategories().Where(a => a.ShowFooter);
@@ -64,6 +66,7 @@ namespace CookHouse.Controllers
             };
             return View(model);
         }
+        [SkipDdosCheck]
         public PartialViewResult GetProductHome(int catId = 0)
         {
             var products = _unitOfWork.ProductRepository.GetQuery(a => a.Active && a.Home, o => o.OrderByDescending(a => a.CreateDate));
@@ -93,7 +96,7 @@ namespace CookHouse.Controllers
             var cateogory = _unitOfWork.ArticleCategoryRepository.GetQuery(a => a.CategoryActive && a.Url == url).FirstOrDefault();
             if (cateogory == null)
             {
-                return RedirectToAction("Index");
+                return RedirectToActionPermanent("ErrorPage");
             }
             var articles = _unitOfWork.ArticleRepository.GetQuery(a => a.Active && (a.ArticleCategoryId == cateogory.Id || a.ArticleCategory.ParentId == cateogory.Id), o => o.OrderByDescending(a => a.CreateDate));
             if (articles.Count() == 1)
@@ -114,7 +117,7 @@ namespace CookHouse.Controllers
             var article = _unitOfWork.ArticleRepository.GetQuery(a => a.Active && a.Url == url).FirstOrDefault();
             if (article == null)
             {
-                return RedirectToAction("Index");
+                return RedirectToActionPermanent("ErrorPage");
             }
             var articles = _unitOfWork.ArticleRepository.GetQuery(p =>
                p.Active && (p.ArticleCategoryId == article.ArticleCategoryId && p.Id != article.Id), q => q.OrderByDescending(a => a.CreateDate), 6);
@@ -125,6 +128,7 @@ namespace CookHouse.Controllers
             };
             return View(model);
         }
+        [SkipDdosCheck]
         public PartialViewResult MenuArticle()
         {
             var model = new MenuArticleViewModel
@@ -133,6 +137,7 @@ namespace CookHouse.Controllers
             };
             return PartialView(model);
         }
+        [SkipDdosCheck]
         public PartialViewResult MenuLeftArticle()
         {
             var cats = ArticleCategories().Where(a => a.TypePost == TypePost.Article);
@@ -189,7 +194,7 @@ namespace CookHouse.Controllers
             {
                 return Json(new { status = false, msg = "Vượt quá số lần cho phép" });
             }
-            Subcribe model = new Subcribe { Email = email, IP = IP };
+            var model = new Subcribe { Email = email, IP = IP };
             _unitOfWork.SubcribeRepository.Insert(model);
             _unitOfWork.Save();
             return Json(new { status = true, msg = "Đăng ký nhân bạn tin thành công!" });
@@ -247,7 +252,7 @@ namespace CookHouse.Controllers
             var category = _unitOfWork.ProductCategoryRepository.GetQuery(a => a.CategoryActive && a.Url == url).FirstOrDefault();
             if (category == null)
             {
-                return RedirectToAction("Index");
+                return RedirectToActionPermanent("ErrorPage");
             }
             var products = _unitOfWork.ProductRepository.GetQuery(a => a.Active && a.ProductCategoryId == category.Id || a.ProductCategory.ParentId == category.Id,
                 o => o.OrderByDescending(a => a.CreateDate));
@@ -280,6 +285,7 @@ namespace CookHouse.Controllers
             };
             return View(model);
         }
+        [SkipDdosCheck]
         public PartialViewResult GetProductCategory(string url, int? page, string sort)
         {
             var pageNumber = page ?? 1;
@@ -316,6 +322,7 @@ namespace CookHouse.Controllers
             };
             return PartialView(model);
         }
+        [SkipDdosCheck]
         public PartialViewResult MenuLeftProduct()
         {
             var cats = ProductCategories().Where(a => a.ShowCategory);
@@ -340,7 +347,7 @@ namespace CookHouse.Controllers
             var product = _unitOfWork.ProductRepository.GetQuery(a => a.Active && a.Url == url).FirstOrDefault();
             if (product == null)
             {
-                return RedirectToAction("Index");
+                return RedirectToActionPermanent("ErrorPage");
             }
             var products = _unitOfWork.ProductRepository.GetQuery(p => p.Active &&
             p.Id != product.Id && p.Active &&
@@ -358,6 +365,13 @@ namespace CookHouse.Controllers
         [Route("lien-he")]
         public ActionResult Contact()
         {
+            return View();
+        }
+
+        public ActionResult ErrorPage()
+        {
+            Response.StatusCode = 404;
+            Response.TrySkipIisCustomErrors = true;
             return View();
         }
         protected override void Dispose(bool disposing)

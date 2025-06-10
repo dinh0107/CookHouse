@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web;
+﻿using System.Data.Entity;
 using CookHouse.Models;
 
 namespace CookHouse.DAL
@@ -26,5 +22,6 @@ namespace CookHouse.DAL
         public DbSet<Ward> Wards { get; set; }
         public DbSet<Subcribe> Subcribes { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<BlockedIpLog> BlockedIpLogs { get; set; }
     }
 }

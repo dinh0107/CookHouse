@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.AccessControl;
-using System.Web;
 using CookHouse.Models;
-using WebGrease.Css.Ast.Selectors;
 
 namespace CookHouse.DAL
 {
@@ -27,7 +22,9 @@ namespace CookHouse.DAL
         private GenericRepository<Ward> _wardRepository;
         private GenericRepository<Subcribe> _subcribeRepository;
         private GenericRepository<Feedback> _feedbackRepository;
+        private GenericRepository<BlockedIpLog> _blockedIpLogsRepository;
 
+        public GenericRepository<BlockedIpLog> BlockedIpLogRepository => _blockedIpLogsRepository ?? (_blockedIpLogsRepository = new GenericRepository<BlockedIpLog>(_context));
         public GenericRepository<Feedback> FeedbackRepository =>
             _feedbackRepository ?? (_feedbackRepository = new GenericRepository<Feedback>(_context));
         public GenericRepository<Subcribe> SubcribeRepository =>
